@@ -1,7 +1,7 @@
 import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
-import { TokenPayload } from '../interfaces/index';
+import { TokenPayloadDto } from '../Dtos/index.js';
 
-export const generateToken = (payload: TokenPayload): string => {
+export const generateToken = (payload: TokenPayloadDto): string => {
   const secret = process.env.JWT_SECRET || 'default-secret';
   const expiration = process.env.JWT_EXPIRATION || '1m';
 
@@ -10,7 +10,7 @@ export const generateToken = (payload: TokenPayload): string => {
   return token;
 };
 
-export const generateVerificationToken = (payload: TokenPayload): string => {
+export const generateVerificationToken = (payload: TokenPayloadDto): string => {
   const secret = process.env.JWT_SECRET || 'default-secret';
   const expiration = process.env.JWT_VERIFICATION_EXPIRATION || '1h';
 

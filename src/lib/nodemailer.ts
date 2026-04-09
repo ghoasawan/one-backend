@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { generateToken } from "./token_generation";
+import { generateToken } from "./token_generation.js";
 
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({

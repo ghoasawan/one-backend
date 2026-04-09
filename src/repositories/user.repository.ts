@@ -1,11 +1,11 @@
-import {AppDataSource, } from "../config/database"
-import {User} from "../entities/user.enitity"
+import {AppDataSource, } from "../config/database.js"
+import {User} from "../entities/user.enitity.js"
 import {Repository} from "typeorm"
-import {UserDto} from "../Dtos/index"
+import {UserDto} from "../Dtos/index.js"
+import { injectable } from "inversify";
 
-
+@injectable()
 export class UserRepository{
-
     private userRepository:Repository<User>
     constructor(){
         this.userRepository= AppDataSource.getRepository(User);

@@ -1,19 +1,20 @@
-import type { UserDto } from "../Dtos/index";
-import { AppError } from "../utils/AppError";
-import { UserRepository } from "../repositories/user.repository";
+import type { UserDto } from "../Dtos/index.js";
+import { AppError } from "../utils/AppError.js";
+import { UserRepository } from "../repositories/user.repository.js";
 import {
   generateToken,
   generateVerificationToken,
   verifyToken,
-} from "../lib/token_generation";
-import { sendVerificationEmail } from "../lib/nodemailer";
+} from "../lib/token_generation.js";
+import { sendVerificationEmail } from "../lib/nodemailer.js";
 import bcrypt from "bcrypt";
+import { injectable, inject } from "inversify";
+import { TYPES } from "../types/index.js";
 
+@injectable()
 export class AuthService {
-  private userRepo: UserRepository;
   
-  constructor() {
-    this.userRepo = new UserRepository();
+  constructor(   @inject(TYPES.UserRepository) private userRepo: UserRepository) {
   }
 
   createUser = async (user: UserDto) => {

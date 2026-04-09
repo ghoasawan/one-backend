@@ -9,7 +9,7 @@
     "emitDecoratorMetadata": true,
     "useDefineForClassFields": false,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
   },
   "include": ["index.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist"]

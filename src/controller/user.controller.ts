@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { asyncHandler } from "../utils/asyncHandler";
-import {UserDto} from "../Dtos/index"
-import {AuthService} from '../services/auth.service'
+import { asyncHandler } from "../utils/asyncHandler.js";
+import {UserDto} from "../Dtos/index.js"
+import {AuthService} from '../services/auth.service.js'
+import { inject, injectable } from "inversify";
+import { TYPES } from "../types/index.js";
 
 
 
+@injectable()
 export class AuthController {
 
-  private authService:AuthService
-  constructor() {
-    this.authService=new AuthService();
-  }
+  constructor(@inject(TYPES.AuthService) private authService:AuthService) {}
 
   createUser = asyncHandler(async (req: Request, res: Response) => {
     const user:UserDto = req.body;

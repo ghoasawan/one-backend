@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 import cookieParser from "cookie-parser";
-import userRoutes from "./src/routes/user.routes";
-import { AppDataSource } from "./src/config/database";
-import { AppError } from "./src/utils/AppError";
+import userRoutes from "./src/routes/user.routes.js";
+import { AppDataSource } from "./src/config/database.js";
+import { AppError } from "./src/utils/AppError.js";
 
 const app = express();
 
@@ -14,8 +14,6 @@ app.use('/api', userRoutes);
 
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error("Error:", err);
-
   if (err instanceof AppError) {
     return res.status(err.statusCode).json({
       message: err.message,
