@@ -1,5 +1,8 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
 import { generateToken } from "./token_generation.js";
+
+dotenv.config();
 
 // Create a transporter using SMTP
 const transporter = nodemailer.createTransport({
@@ -13,7 +16,7 @@ const transporter = nodemailer.createTransport({
 });
 
 export const sendVerificationEmail = async (email: string, token: string): Promise<void> => {
-  const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email/${token}`;
+  const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${token}`;
 
   const htmlTemplate = `
     <!DOCTYPE html>
@@ -142,7 +145,7 @@ export const sendVerificationEmail = async (email: string, token: string): Promi
   `;
 
   const mailOptions = {
-    from: `"One-Chat" <${process.env.SMTP_USER}>`,
+    from:process.env.SMTP_USER,
     to: email,
     subject: '✓ Verify Your Email Address - One-Chat',
     html: htmlTemplate,

@@ -14,13 +14,12 @@ export class AuthController {
 
   createUser = asyncHandler(async (req: Request, res: Response) => {
     const user:UserDto = req.body;
-
    const newUser=await  this.authService.createUser(user);
 
     res.status(201).json({
       message:
         "User created successfully. Please check your email to verify your account.",
-      user: { id: newUser.id, name: newUser.name, email: newUser.email },
+      user: { id: newUser.id,name:user.name, email: newUser.email },
     });
   });
 
@@ -39,12 +38,13 @@ export class AuthController {
     res.status(200).json({
       message: "Login successful",
       auth_token:token,
-      user,
+      user:{id:user.id, email:user.email, name:user.name},
     });
   });
 
   verifyEmail = asyncHandler(async (req: Request, res: Response) => {
     const { token } = req.body;
+    console.log("token", token)
 
     const { token: authToken, user } = await this.authService.verifyEmail(token);
 
@@ -58,12 +58,12 @@ export class AuthController {
     res.status(200).json({
       message: "Email verified successfully",
       auth_token: authToken,
-      user,
+      user:{id:user.id, email:user.email, name:user.name}
     });
   });
 
 
-  logout = asyncHandler((req: Request, res: Response) => {
+  logout = asyncHandler(async (req: Request, res: Response) => {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -75,4 +75,13 @@ export class AuthController {
       message: "Logout successful",
     });
   });
+
+  resetVerificationLink=asyncHandler(async (req:Request, res:Response)=>{
+
+    const {email}=req.body;
+
+    await this.authService.resendVerificationLink(email)
+
+    return res.status(200).json({message:"Verification Link send to the email"})
+  })
 }

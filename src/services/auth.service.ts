@@ -13,9 +13,7 @@ import { TYPES } from "../types/index.js";
 
 @injectable()
 export class AuthService {
-  
-  constructor(   @inject(TYPES.UserRepository) private userRepo: UserRepository) {
-  }
+  constructor(@inject(TYPES.UserRepository) private userRepo: UserRepository) {}
 
   createUser = async (user: UserDto) => {
     const { name, email, password, phone } = user;
@@ -24,6 +22,10 @@ export class AuthService {
     }
 
     const userExists = await this.userRepo.findUser(email);
+
+    if (userExists && !userExists?.is_verified) {
+      throw new AppError(400, "Verify your Email");
+    }
 
     if (userExists) {
       throw new AppError(409, "User already exists");
@@ -40,10 +42,9 @@ export class AuthService {
     });
 
     const verificationToken = generateVerificationToken({
-      userId: newUser.id,
       email: newUser.email,
     });
-    
+
     await sendVerificationEmail(newUser.email, verificationToken);
 
     return newUser;
@@ -60,6 +61,10 @@ export class AuthService {
       throw new AppError(404, "User with this email does not exist");
     }
 
+    if(!user.is_verified)
+    {
+      throw new AppError(400, "Verify your Email")
+    }
     // Compare hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
@@ -132,5 +137,15 @@ export class AuthService {
         phone: user.phone,
       },
     };
+  };
+
+  resendVerificationLink = async (email: string) => {
+    if (!email) {
+      throw new AppError(400, "Email is Required");
+    }
+
+    const verificationToken = generateVerificationToken({ email: email });
+
+    await sendVerificationEmail(email, verificationToken);
   };
 }

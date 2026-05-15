@@ -6,9 +6,10 @@ import type { AuthController } from "../controller/user.controller.js";
 const router = Router();
 
 const authController = myContainer.get<AuthController>(TYPES.AuthController);
-router.post('/register', authController.createUser);
-router.post('/login', authController.loginUser);
-router.post('/verify-email', authController.verifyEmail);
-router.post("/logout",authController.logout);
+router.post('/auth/register', authController.createUser);
+router.post('/auth/login', authController.loginUser);
+router.post('/auth/verify-email', authController.verifyEmail);
+router.post("/auth/logout",authController.logout);
+router.post("/resend-verification",authController.resetVerificationLink)
 
 export default router;

@@ -1,6 +1,6 @@
 export interface TokenPayloadDto  {
-    userId: string;
-    email: string;
+    userId?:string;
+    email?: string;
   }
 
 export interface UserDto{
