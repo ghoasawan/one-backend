@@ -24,7 +24,7 @@ export class AuthService {
     const userExists = await this.userRepo.findUser(email);
 
     if (userExists && !userExists?.is_verified) {
-      throw new AppError(400, "Verify your Email");
+      throw new AppError(403, "Verify your Email");
     }
 
     if (userExists) {
@@ -63,7 +63,7 @@ export class AuthService {
 
     if(!user.is_verified)
     {
-      throw new AppError(400, "Verify your Email")
+      throw new AppError(403, "Verify your Email")
     }
     // Compare hashed password
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -144,6 +144,11 @@ export class AuthService {
       throw new AppError(400, "Email is Required");
     }
 
+    const user= await this.userRepo.findUser(email);
+
+    if (!user) {
+      throw new AppError(404, "User with this email does not exist");
+    }
     const verificationToken = generateVerificationToken({ email: email });
 
     await sendVerificationEmail(email, verificationToken);
